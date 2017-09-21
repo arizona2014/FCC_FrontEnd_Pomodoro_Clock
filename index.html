@@ -1,0 +1,152 @@
+<html>
+  <head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.12/angular-csp.css" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  </head>
+  <body  ng-app="Pomodoro">
+    <div class="container" ng-controller="myCtrl">
+      <div class="row">
+        <div id="pomodoroWidget" class="col-md-12 text-center">
+          <h1 id="title">Pomodoro Clock</h1>
+          <div class="row" ng-show="runsto === 'stopped'">
+            
+              <div class="breakButtons col-md-6">
+                <a ng-click="breakMinus()" class="btn btn-warning btn-xs">-</a>
+                <span id="breakMins">{{breakMins}}</span>
+                <a ng-click="breakPlus()" class="btn btn-warning btn-xs" >+</a>       
+              </div>   
+
+              <div class="sessionButtons col-md-6">
+                <a ng-click="sessionMinus()" class="btn btn-warning btn-xs">-</a>
+                <span id="sessionMins">{{sessionMins}}</span>
+                <a ng-click="sessionPlus()" class="btn btn-warning btn-xs" >+</a>       
+              </div>                       
+            
+          </div>  
+          <br /><br />
+          <div class="row clock">
+            
+              <div ng-click="startCountDown()" class="clock col-md-12">                
+                <span id="timeLeft">{{timeLeft}}</span><br />
+                <span id="mode">{{modeText}}</span>                
+              </div>                     
+            
+          </div> 
+        </div>
+        <br />
+        <hr />
+        <br />
+        <footer class="text-center">Pomodoro Clock AngularJS application developed for Free Code Camp by <a>Arizona2014</a></footer>
+      </div>
+    </div> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.12/angular.js"></script>
+    <script>
+
+          var app = angular.module('Pomodoro',[]);
+      
+          
+          app.controller('myCtrl', function ($scope,$timeout) {
+
+              function getMinutes(sec){
+                var min = Math.floor(sec / 60);  
+                var secs = sec % 60;  
+                if(min < 10){
+                  min = "0"+min;
+                }                
+                
+                if(secs < 10){
+                  secs = "0"+secs;
+                }
+                return min + ':' + secs;
+              }
+            
+              $scope.startCountDown = function(){     
+
+                $timeout(function() {
+                  
+                  	$scope.secondsLeft--;
+                    $scope.timeLeft =  getMinutes($scope.secondsLeft);
+                  console.log($scope.secondsLeft)
+                  	if($scope.secondsLeft === 0){
+                      $scope.toggleClock();
+                    } else if($scope.runsto === "stopped"){
+                      console.log("Do nothing")
+                    } else {
+                      startCountDown();
+                    }
+                }, 1000);
+              }
+            
+              function stopCountDown(){
+                console.log("Count down stopped");
+                $scope.clockStopped = true;
+              }            
+
+              $scope.breakMins = 5;    // 300 sec = 5 mins        
+              $scope.breakSec = $scope.breakMins * 60;    // 300 sec = 5 mins        
+              $scope.sessionMins = 25;    // 300 sec = 5 mins        
+              $scope.sessionSec = $scope.sessionMins * 60;    // 300 sec = 5 mins    
+              $scope.secondsLeft =  $scope.sessionSec;
+              $scope.timeLeft =  getMinutes($scope.secondsLeft);
+              $scope.sesbre = "Session";
+              $scope.runsto = "stopped";
+              $scope.modeText = $scope.sesbre + " " + $scope.runsto;
+
+              $scope.breakMinus = function(){
+                console.log($scope.sesbre)
+                if($scope.breakMins > 1){
+                  $scope.breakMins--;
+                  $scope.breakSec = $scope.breakMins * 60;
+                  $scope.secondsLeft =  $scope.breakSec;
+                  $scope.timeLeft= getMinutes($scope.secondsLeft);
+                }
+              };
+      
+              $scope.breakPlus = function(){
+                  
+                    $scope.breakMins++;
+                    $scope.breakSec = $scope.breakMins * 60;
+                    $scope.secondsLeft =  $scope.breakSec;
+                    $scope.timeLeft= getMinutes($scope.secondsLeft);
+                 
+              };
+
+              $scope.sessionMinus = function(){
+                if($scope.sessionMins > 1 && $scope.sesbre === "Session"){
+                  $scope.sessionMins--;
+                  $scope.sessionSec = $scope.sessionMins * 60;
+                  $scope.secondsLeft =  $scope.sessionSec;
+                  $scope.timeLeft= getMinutes($scope.secondsLeft);
+                }
+              };
+      
+              $scope.sessionPlus = function(){
+                if($scope.sesbre === "Session" ){
+                  $scope.sessionMins++;
+                  $scope.sessionSec = $scope.sessionMins * 60;
+                  $scope.secondsLeft =  $scope.sessionSec;
+                  $scope.timeLeft= getMinutes($scope.secondsLeft);
+                }
+              };  
+
+              $scope.toggleClock = function(){
+                
+                  if($scope.runsto === "stopped"){
+                    $scope.runsto = "running";
+                    $scope.modeText = $scope.sesbre + " " + $scope.runsto;
+                    //startCountDown();
+                  } else {
+                    $scope.runsto = "stopped";
+                    $scope.modeText = $scope.sesbre + " " + $scope.runsto;
+                    stopCountDown();
+                  }
+                  
+              }  
+            
+          });
+    </script> 
+  </body>
+</html>
