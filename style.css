@@ -1,0 +1,31 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+
+	font: bold 14px Arial, sans-serif;
+}
+
+#title {
+  margin:40px 0px 50px;
+}
+
+#breakMins, #sessionMins {
+  color:orange;
+  font-size:28px;
+  margin:0px 10px;
+  
+}
+
+#timeLeft {
+    font-size:78px;
+}
+
+.clock {
+  margin:0px 0 40px 0;
+  cursor: pointer
+}
+
+#mode {
+	font-size:40px;
+}
